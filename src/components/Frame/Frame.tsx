@@ -1,8 +1,8 @@
 import { Stage, Layer, Image as KonvaImage, Text, Group, Rect } from 'react-konva';
-import frame from 'assets/images/frame.png';
+import frame from 'assets/images/id-card.svg';
 import useImage from 'use-image';
 import styled from 'styled-components';
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState, WheelEventHandler } from 'react';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Divider, Slider } from 'antd';
@@ -43,15 +43,27 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
   name,
   image
 }, ref) => {
+  const [scale, setScale] = useState<number>(1);
   const [frameUrl] = useImage(frame);
   const parentRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<Konva.Image>(null);
   const isDragging = useRef<boolean>(false);
   const initialPos = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
 
+  useEffect(() => {
+    setScale(1);
+  }, [image]);
+
   const ratio = useMemo(() => {
     return parentRef.current ? parentRef.current.clientWidth / IMAGE_WIDTH : 1;
   }, [parentRef.current]);
+
+  useEffect(() => {
+    if (imageRef.current) {
+      const img = imageRef.current;
+      img.scale({ x: scale, y: scale });
+    }
+  }, [scale])
 
   function onMouseDown(e: KonvaEventObject<MouseEvent>) {
     if (imageRef.current) {
@@ -83,16 +95,14 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
     isDragging.current = false;
   }
 
-  function onZoomChange(value: number) {
-    if (imageRef.current) {
-      const img = imageRef.current;
-      img.scale({ x: value, y: value });
-    }
+  function onWheel(e: React.WheelEvent<HTMLDivElement>) {
+    const wheelDelta = e.nativeEvent.deltaY / Math.abs(e.nativeEvent.deltaY);
+    setScale(prevScale => prevScale + 0.025 * wheelDelta)
   }
 
   return (
     <div>
-      <Wrapper ref={parentRef} >
+      <Wrapper ref={parentRef} onWheel={onWheel}>
         <Stage
           ref={ref}
           width={IMAGE_WIDTH}
@@ -102,12 +112,12 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
             <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
           </Layer>
           <Layer>
-            <KonvaImage image={frameUrl} onMouseDown={onMouseDown} />
+            <KonvaImage image={frameUrl} onMouseDown={onMouseDown} width={IMAGE_WIDTH} height={IMAGE_HEIGHT} x={0} y={0} />
           </Layer>
 
           <Layer>
             <Group clipFunc={(ctx: any) => {
-              ctx.arc(472, 581, 247, 0, Math.PI * 2, false)
+              ctx.arc(472, 567, 247, 0, Math.PI * 2, false)
             }}>
               {image &&
                 <KonvaImage
@@ -134,7 +144,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
       </Wrapper >
       <Divider />
       <p>Phóng to</p>
-      <Slider defaultValue={1} min={0} max={2} step={0.025} onChange={onZoomChange} />
+      <Slider defaultValue={1} value={scale} min={0} max={2} step={0.025} onChange={(value) => setScale(value)} />
     </div>
   )
 })

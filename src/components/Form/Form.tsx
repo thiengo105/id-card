@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 
 type InfoFormProps = {
   name: string,
+  loading: boolean,
+  hasImage: boolean,
   onFileChange(file: File): void,
   onNameChange(name: string): void,
-  onDownloadClick(): void
+  onDoneClick(): void
 }
 
-const InfoForm: React.FC<InfoFormProps> = ({ name, onFileChange, onNameChange, onDownloadClick }) => {
+const InfoForm: React.FC<InfoFormProps> = ({ name, loading, hasImage, onFileChange, onNameChange, onDoneClick }) => {
 
   const [fileList, setFileList] = useState<Array<UploadFile>>([]);
 
@@ -38,10 +40,18 @@ const InfoForm: React.FC<InfoFormProps> = ({ name, onFileChange, onNameChange, o
           }}
           beforeUpload={() => false}
           showUploadList={false}
+          accept="image/*"
         >
           <Button type="primary" size="large" block>Chọn ảnh</Button>
         </Upload>
-        <Button type="primary" size="large" block onClick={onDownloadClick}>Tải xuống</Button>
+        <Button
+          type="primary"
+          size="large"
+          block
+          onClick={onDoneClick}
+          loading={loading}
+          disabled={!hasImage}
+        >Xong</Button>
       </Space>
     </div>
   )

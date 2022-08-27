@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import 'antd/dist/antd.css';
 import Form from 'components/Form/Form';
 import Konva from 'konva';
+import { uploadToCloudinary } from 'services/upload';
+import { Modal } from 'antd';
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,15 +32,40 @@ function App() {
   const [name, setName] = useState<string>('');
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const frameRef = useRef<Konva.Stage>(null);
+  const [loading, setLoading] = useState(false);
 
-  function onDownloadClick() {
+  function resetData() {
+    setName("");
+    setImage(null);
+  }
+
+  async function onDoneClick() {
     if (frameRef.current) {
+      setLoading(true);
+      const fileName = `${name}.png`
       const url = frameRef.current.toDataURL();
-      console.log(url);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${name}.png`;
-      a.click();
+      frameRef.current.toBlob({
+        async callback(blob) {
+          const file = new File([blob], fileName);
+          await uploadToCloudinary(file);
+          setLoading(false);
+          resetData();
+          Modal.confirm({
+            type: "success",
+            title: "Đã tải lên ảnh thẻ tình nguyện viên",
+            content: `Cảm ơn ${name} nha! Bạn có muốn tải ảnh xuống không?`,
+            okText: "OK tải đi",
+            cancelText: "Thôi khỏi",
+            onOk: () => {
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = fileName;
+              a.click();
+            }
+          })
+        },
+      });
+
     }
   }
 
@@ -60,11 +87,13 @@ function App() {
       <ColRight>
         <Form
           name={name}
+          loading={loading}
+          hasImage={!!image}
           onFileChange={onFileChange}
           onNameChange={(name) => {
             setName(name);
           }}
-          onDownloadClick={onDownloadClick}
+          onDoneClick={onDoneClick}
         />
       </ColRight>
     </Wrapper>
