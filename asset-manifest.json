@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/id-card-generator/static/css/main.4ab69162.css",
-    "main.js": "/id-card-generator/static/js/main.f72f4405.js",
-    "static/js/787.3687d65a.chunk.js": "/id-card-generator/static/js/787.3687d65a.chunk.js",
-    "static/media/id-card.svg": "/id-card-generator/static/media/id-card.61b433eb95c415617a34b59ecbc0e83c.svg",
-    "static/media/VLSELPHIA.OTF": "/id-card-generator/static/media/VLSELPHIA.c0a484e377b0179e8325.OTF",
-    "index.html": "/id-card-generator/index.html",
-    "main.4ab69162.css.map": "/id-card-generator/static/css/main.4ab69162.css.map",
-    "main.f72f4405.js.map": "/id-card-generator/static/js/main.f72f4405.js.map",
-    "787.3687d65a.chunk.js.map": "/id-card-generator/static/js/787.3687d65a.chunk.js.map"
+    "main.css": "/id-card/static/css/main.979e6fa2.css",
+    "main.js": "/id-card/static/js/main.9ca0f584.js",
+    "static/js/787.3687d65a.chunk.js": "/id-card/static/js/787.3687d65a.chunk.js",
+    "static/media/id-card.svg": "/id-card/static/media/id-card.61b433eb95c415617a34b59ecbc0e83c.svg",
+    "static/media/VLSELPHIA.OTF": "/id-card/static/media/VLSELPHIA.c0a484e377b0179e8325.OTF",
+    "index.html": "/id-card/index.html",
+    "main.979e6fa2.css.map": "/id-card/static/css/main.979e6fa2.css.map",
+    "main.9ca0f584.js.map": "/id-card/static/js/main.9ca0f584.js.map",
+    "787.3687d65a.chunk.js.map": "/id-card/static/js/787.3687d65a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4ab69162.css",
-    "static/js/main.f72f4405.js"
+    "static/css/main.979e6fa2.css",
+    "static/js/main.9ca0f584.js"
   ]
 }
