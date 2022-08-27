@@ -1,17 +1,36 @@
-import { Button, Form, Input, Space, Upload, UploadFile } from "antd";
+import { Alert, Button, Form, Input, Space, Upload, UploadFile } from "antd";
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  .upload-wrapper {
+    display: block;
+  }
+
+  .ant-upload.ant-upload-select {
+    display: block;
+  }
+`;
 
 type InfoFormProps = {
-  name: string,
-  loading: boolean,
-  hasImage: boolean,
-  onFileChange(file: File): void,
-  onNameChange(name: string): void,
-  onDoneClick(): void
-}
+  name: string;
+  loading: boolean;
+  imageLoading: boolean;
+  hasImage: boolean;
+  onFileChange(file: File): void;
+  onNameChange(name: string): void;
+  onDoneClick(): void;
+};
 
-const InfoForm: React.FC<InfoFormProps> = ({ name, loading, hasImage, onFileChange, onNameChange, onDoneClick }) => {
-
+const InfoForm: React.FC<InfoFormProps> = ({
+  name,
+  loading,
+  imageLoading,
+  hasImage,
+  onFileChange,
+  onNameChange,
+  onDoneClick,
+}) => {
   const [fileList, setFileList] = useState<Array<UploadFile>>([]);
 
   useEffect(() => {
@@ -25,13 +44,28 @@ const InfoForm: React.FC<InfoFormProps> = ({ name, loading, hasImage, onFileChan
   }
 
   return (
-    <div>
+    <Wrapper>
       <Form layout="vertical" onValuesChange={onValuesChange}>
+        <Form.Item>
+          <Alert
+            showIcon
+            type="info"
+            message="Lưu ý"
+            description={
+              <div>
+                Hãy chọn ảnh có mặt của mình nhé, vì không có ảnh của mình thì
+                thẻ này sẽ không được duyệt và in, nếu đi chương trình mà không
+                có thẻ tình nguyện viên thì sẽ buồn lắm đó{" "}
+                <span role="img">{String.fromCodePoint(0x1f641)}</span>
+              </div>
+            }
+          />
+        </Form.Item>
         <Form.Item label="Họ và tên" name="name" initialValue={name}>
-          <Input />
+          <Input size="large" />
         </Form.Item>
       </Form>
-      <Space direction="horizontal">
+      <Space direction="horizontal" style={{ width: "100%" }}>
         <Upload
           maxCount={1}
           fileList={fileList}
@@ -40,9 +74,13 @@ const InfoForm: React.FC<InfoFormProps> = ({ name, loading, hasImage, onFileChan
           }}
           beforeUpload={() => false}
           showUploadList={false}
-          accept="image/*"
+          accept="image/*,.heic"
+          style={{ width: "100%" }}
+          className="upload-wrapper"
         >
-          <Button type="primary" size="large" block>Chọn ảnh</Button>
+          <Button type="primary" size="large" block loading={imageLoading}>
+            Chọn ảnh
+          </Button>
         </Upload>
         <Button
           type="primary"
@@ -51,10 +89,12 @@ const InfoForm: React.FC<InfoFormProps> = ({ name, loading, hasImage, onFileChan
           onClick={onDoneClick}
           loading={loading}
           disabled={!hasImage || !name}
-        >Xong</Button>
+        >
+          Tải lên
+        </Button>
       </Space>
-    </div>
-  )
-}
+    </Wrapper>
+  );
+};
 
 export default InfoForm;
