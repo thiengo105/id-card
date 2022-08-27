@@ -33,6 +33,10 @@ const ColLeft = styled.div`
 
 const ColRight = styled.div`
   width: 400px;
+
+  @media screen and (max-width: 768px) {
+    width: auto;
+  }
 `;
 
 function App() {
