@@ -65,33 +65,44 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
     }
   }, [scale])
 
-  function onMouseDown(e: KonvaEventObject<MouseEvent>) {
+  function onMouseDown(e: KonvaEventObject<MouseEvent | TouchEvent>) {
+    const clientX = e.type === "mousedown" ? (e as KonvaEventObject<MouseEvent>).evt.x : (e as KonvaEventObject<TouchEvent>).evt.touches[0].clientX;
+    const clientY = e.type === "mousedown" ? (e as KonvaEventObject<MouseEvent>).evt.y : (e as KonvaEventObject<TouchEvent>).evt.touches[0].clientY;
     if (imageRef.current) {
       initialPos.current = {
-        x: e.evt.x - imageRef.current.x() * ratio,
-        y: e.evt.y - imageRef.current.y() * ratio
+        x: clientX - imageRef.current.x() * ratio,
+        y: clientY - imageRef.current.y() * ratio
       };
       isDragging.current = true;
       document.onmousemove = onMouseMove;
+      document.ontouchmove = onMouseMove;
+
       document.onmouseup = onMouseUp;
+      document.ontouchend = onMouseUp;
+
     }
 
   }
 
-  function onMouseMove(e: MouseEvent) {
-    if (imageRef.current && isDragging.current) {
+  function onMouseMove(e: MouseEvent | TouchEvent) {
 
+    if (imageRef.current && isDragging.current) {
+      const clientX = e.type === "mousemove" ? (e as MouseEvent).clientX : (e as TouchEvent).touches[0].clientX;
+      const clientY = e.type === "mousemove" ? (e as MouseEvent).clientY : (e as TouchEvent).touches[0].clientY;
       const img = imageRef.current;
-      const dx = e.clientX - initialPos.current.x;
-      const dy = e.clientY - initialPos.current.y;
+      const dx = clientX - initialPos.current.x;
+      const dy = clientY - initialPos.current.y;
 
       img.x((img.offsetX() + dx) / ratio);
       img.y((img.offsetY() + dy) / ratio);
     }
   }
 
-  function onMouseUp(e: MouseEvent) {
-    initialPos.current = { x: e.clientX * ratio, y: e.clientY * ratio };
+  function onMouseUp(e: MouseEvent | TouchEvent) {
+    // Touch end event doesn't have position
+    const clientX = e.type === "mouseup" ? (e as MouseEvent).clientX : 0;
+    const clientY = e.type === "mouseup" ? (e as MouseEvent).clientY : 0;
+    initialPos.current = { x: clientX * ratio, y: clientY * ratio };
     isDragging.current = false;
   }
 
@@ -112,7 +123,14 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
             <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
           </Layer>
           <Layer>
-            <KonvaImage image={frameUrl} onMouseDown={onMouseDown} width={IMAGE_WIDTH} height={IMAGE_HEIGHT} x={0} y={0} />
+            <KonvaImage
+              image={frameUrl}
+              onMouseDown={onMouseDown}
+              onTouchStart={onMouseDown}
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT}
+              x={0} y={0}
+            />
           </Layer>
 
           <Layer>
@@ -124,6 +142,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(({
                   ref={imageRef}
                   image={image}
                   onMouseDown={onMouseDown}
+                  onTouchStart={onMouseDown}
                 />
               }
             </Group>
