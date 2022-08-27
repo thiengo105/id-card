@@ -70,9 +70,26 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
     useEffect(() => {
       if (imageRef.current) {
         const img = imageRef.current;
+        const currentScale = img.scaleX();
+        const currentPosition = img.position();
+
+        const center = {
+          x: IMAGE_WIDTH / 2,
+          y: 576,
+        };
+
+        const relatedTo = {
+          x: (center.x - currentPosition.x) / currentScale,
+          y: (center.y - currentPosition.y) / currentScale,
+        };
+
         img.scale({ x: scale, y: scale });
+        img.position({
+          x: center.x - relatedTo.x * scale,
+          y: center.y - relatedTo.y * scale,
+        });
       }
-    }, [scale]);
+    }, [scale, ratio]);
 
     function onMouseDown(e: KonvaEventObject<MouseEvent>) {
       if (imageRef.current) {
@@ -123,7 +140,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
             <Layer>
               <Group
                 clipFunc={(ctx: any) => {
-                  ctx.arc(472, 567, 247, 0, Math.PI * 2, false);
+                  ctx.arc(IMAGE_WIDTH / 2, 567, 247, 0, Math.PI * 2, false);
                 }}
               >
                 {image && (
@@ -156,7 +173,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
             <Slider
               defaultValue={1}
               value={scale}
-              min={0}
+              min={0.025}
               max={2}
               step={0.025}
               onChange={(value) => setScale(value)}

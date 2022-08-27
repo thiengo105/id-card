@@ -60,9 +60,9 @@ function App() {
             setLoading(false);
             resetData();
             Modal.confirm({
-              type: "success",
+              icon: null,
               title: "Đã tải lên ảnh thẻ tình nguyện viên",
-              content: `Cảm ơn ${name} nha! Bạn có muốn tải ảnh xuống không?`,
+              content: `Cảm ơn ${name} nha! Bạn có muốn tải luôn cái ảnh về không?`,
               okText: "OK tải đi",
               cancelText: "Thôi khỏi",
               onOk: () => {

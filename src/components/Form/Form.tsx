@@ -39,13 +39,9 @@ const InfoForm: React.FC<InfoFormProps> = ({
     }
   }, [fileList, onFileChange]);
 
-  function onValuesChange(_: any, values: any) {
-    onNameChange(values.name);
-  }
-
   return (
     <Wrapper>
-      <Form layout="vertical" onValuesChange={onValuesChange}>
+      <Form layout="vertical">
         <Form.Item>
           <Alert
             showIcon
@@ -61,8 +57,12 @@ const InfoForm: React.FC<InfoFormProps> = ({
             }
           />
         </Form.Item>
-        <Form.Item label="Họ và tên" name="name" initialValue={name}>
-          <Input size="large" />
+        <Form.Item label="Họ và tên">
+          <Input
+            size="large"
+            value={name}
+            onChange={(e) => onNameChange(e.target.value)}
+          />
         </Form.Item>
       </Form>
       <Space direction="horizontal" style={{ width: "100%" }}>
