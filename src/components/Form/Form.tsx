@@ -50,7 +50,7 @@ const InfoForm: React.FC<InfoFormProps> = ({ name, loading, hasImage, onFileChan
           block
           onClick={onDoneClick}
           loading={loading}
-          disabled={!hasImage}
+          disabled={!hasImage || !name}
         >Xong</Button>
       </Space>
     </div>
