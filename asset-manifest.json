@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/id-card-generator/static/css/main.4ab69162.css",
+    "main.js": "/id-card-generator/static/js/main.f72f4405.js",
+    "static/js/787.3687d65a.chunk.js": "/id-card-generator/static/js/787.3687d65a.chunk.js",
+    "static/media/id-card.svg": "/id-card-generator/static/media/id-card.61b433eb95c415617a34b59ecbc0e83c.svg",
+    "static/media/VLSELPHIA.OTF": "/id-card-generator/static/media/VLSELPHIA.c0a484e377b0179e8325.OTF",
+    "index.html": "/id-card-generator/index.html",
+    "main.4ab69162.css.map": "/id-card-generator/static/css/main.4ab69162.css.map",
+    "main.f72f4405.js.map": "/id-card-generator/static/js/main.f72f4405.js.map",
+    "787.3687d65a.chunk.js.map": "/id-card-generator/static/js/787.3687d65a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4ab69162.css",
+    "static/js/main.f72f4405.js"
+  ]
+}
