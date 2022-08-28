@@ -1,6 +1,10 @@
 {
   "Volunteer": {
-    "name": "string",
-    "generated": "boolean"
+    "name": {
+      "string": {}
+    },
+    "generated": {
+      "boolean": {}
+    }
   }
 }
