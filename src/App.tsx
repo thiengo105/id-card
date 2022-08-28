@@ -79,11 +79,18 @@ function App() {
                 resetData();
               },
             });
-          } catch (error) {
+          } catch (error: any) {
             setLoading(false);
             Modal.error({
               title: "Lỗi",
-              content: "Có lỗi xảy ra rồi, bạn báo cho tác giả giùm nha!",
+              content: (
+                <div>
+                  <div>Có lỗi xảy ra rồi, bạn báo cho tác giả giùm nha!</div>
+                  {error.response?.data?.error?.message && (
+                    <pre>{error.response.data.error.message}</pre>
+                  )}
+                </div>
+              ),
             });
           }
         },

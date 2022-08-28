@@ -136,8 +136,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   height={size.width / imageRatio}
                   fill="#ffffff"
                 />
-              </Layer>
-              <Layer>
                 <KonvaImage
                   id="frame"
                   image={frameUrl}
@@ -147,9 +145,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   y={0}
                   preventDefault={false}
                 />
-              </Layer>
-
-              <Layer>
                 <Group
                   clipFunc={(ctx: any) => {
                     ctx.arc(
@@ -196,8 +191,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     ]}
                   />
                 )}
-              </Layer>
-              <Layer>
                 <Text
                   x={0}
                   width={size.width}
@@ -221,8 +214,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
         >
           <Layer>
             <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
-          </Layer>
-          <Layer>
             <KonvaImage
               image={frameUrl}
               width={IMAGE_WIDTH}
@@ -230,9 +221,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               x={0}
               y={0}
             />
-          </Layer>
-
-          <Layer>
             <Group
               clipFunc={(ctx: any) => {
                 ctx.arc(IMAGE_WIDTH / 2 - 1, 567, 247, 0, Math.PI * 2, false);
@@ -252,8 +240,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                 />
               )}
             </Group>
-          </Layer>
-          <Layer>
             <Text
               x={0}
               width={IMAGE_WIDTH}
