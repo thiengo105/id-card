@@ -29,7 +29,7 @@ type FrameProps = {
 };
 const Frame = React.forwardRef<Konva.Stage, FrameProps>(
   ({ name, image }, ref) => {
-    const [isSelected, setSelected] = useState(false);
+    const [isSelected, setSelected] = useState(true);
     const [frameUrl] = useImage(frame);
     const parentRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<Konva.Image>(null);
@@ -53,12 +53,9 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
         if (image && isSelected) {
           trRef.current.nodes([imageRef.current]);
           trRef.current.getLayer()?.batchDraw();
-        } else {
-          trRef.current.detach();
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [imageRef.current, trRef.current, image, isSelected]);
+    }, [image, isSelected]);
 
     const imageSize = useMemo(() => {
       let width = 0,
@@ -85,12 +82,15 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
       return { width, height };
     }, [image, size]);
 
+    function selectImage(e: KonvaEventObject<MouseEvent>) {
+      if (e.target.attrs.id === "photo") {
+        setSelected(true);
+      }
+    }
+
     function onStageClick(e: KonvaEventObject<MouseEvent>) {
       if (e.target.attrs.id === "frame") {
         setSelected(false);
-      }
-      if (e.target.attrs.id === "photo") {
-        setSelected(true);
       }
     }
 
@@ -128,6 +128,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               width={size.width}
               height={size.width / imageRatio}
               onMouseDown={onStageClick}
+              preventDefault={false}
             >
               <Layer>
                 <Rect
@@ -144,6 +145,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   height={size.width / imageRatio}
                   x={0}
                   y={0}
+                  preventDefault={false}
                 />
               </Layer>
 
@@ -162,6 +164,9 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                 >
                   {image && (
                     <KonvaImage
+                      onClick={selectImage}
+                      onTap={selectImage}
+                      onDragStart={selectImage}
                       id="photo"
                       ref={imageRef}
                       image={image}
@@ -177,18 +182,20 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     />
                   )}
                 </Group>
-                <Transformer
-                  id="transformer"
-                  ref={trRef}
-                  centeredScaling={true}
-                  keepRatio={true}
-                  enabledAnchors={[
-                    "top-left",
-                    "top-right",
-                    "bottom-left",
-                    "bottom-right",
-                  ]}
-                />
+                {isSelected && (
+                  <Transformer
+                    id="transformer"
+                    ref={trRef}
+                    centeredScaling={true}
+                    keepRatio={true}
+                    enabledAnchors={[
+                      "top-left",
+                      "top-right",
+                      "bottom-left",
+                      "bottom-right",
+                    ]}
+                  />
+                )}
               </Layer>
               <Layer>
                 <Text
