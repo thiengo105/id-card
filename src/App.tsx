@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import Form from "components/Form/Form";
 import Konva from "konva";
 import { uploadToCloudinary } from "services/upload";
-import { Divider, Modal } from "antd";
+import { Alert, Divider, Modal } from "antd";
 import heic2any from "heic2any";
 import Footer from "components/Footer/Footer";
 
@@ -82,12 +82,16 @@ function App() {
           } catch (error: any) {
             setLoading(false);
             Modal.error({
-              title: "Lỗi",
+              title: "Thất bại",
               content: (
                 <div>
-                  <div>Có lỗi xảy ra rồi, bạn báo cho tác giả giùm nha!</div>
+                  <p>Có lỗi xảy ra rồi, bạn báo cho tác giả giùm nha!</p>
                   {error.response?.data?.error?.message && (
-                    <pre>{error.response.data.error.message}</pre>
+                    <Alert
+                      type="error"
+                      message="Lỗi:"
+                      description={error.response.data.error.message}
+                    />
                   )}
                 </div>
               ),
