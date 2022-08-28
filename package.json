@@ -12,6 +12,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",
+    "ahooks": "^3.7.0",
     "antd": "^4.22.7",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",

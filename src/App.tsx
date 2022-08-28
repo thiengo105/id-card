@@ -56,13 +56,13 @@ function App() {
       setLoading(true);
       const fileName = `${name}.png`;
       const url = frameRef.current.toDataURL();
+
       frameRef.current.toBlob({
         async callback(blob) {
           try {
             const file = new File([blob], fileName);
             await uploadToCloudinary(file);
             setLoading(false);
-            resetData();
             Modal.confirm({
               icon: null,
               title: "Đã tải lên ảnh thẻ tình nguyện viên",
@@ -74,6 +74,9 @@ function App() {
                 a.href = url;
                 a.download = fileName;
                 a.click();
+              },
+              afterClose: () => {
+                resetData();
               },
             });
           } catch (error) {
@@ -89,6 +92,7 @@ function App() {
   }
 
   const onFileChange = useCallback(async (file: File) => {
+    setImage(null);
     setImageLoading(true);
     let fileToConvert = file;
 

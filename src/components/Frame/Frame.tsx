@@ -5,6 +5,7 @@ import {
   Text,
   Group,
   Rect,
+  Transformer,
 } from "react-konva";
 import frame from "assets/images/id-card.svg";
 import useImage from "use-image";
@@ -12,35 +13,14 @@ import styled from "styled-components";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
-import { Slider } from "antd";
+import { useSize } from "ahooks";
 
-const IMAGE_WIDTH = 946;
-const IMAGE_HEIGHT = 1300;
+const IMAGE_WIDTH = 945;
+const IMAGE_HEIGHT = 1299;
 
 const Wrapper = styled.div`
   position: relative;
   margin-bottom: 20px;
-
-  &::after {
-    content: "";
-    display: block;
-    padding-top: calc(1300 / 946 * 100%);
-  }
-
-  .konvajs-content {
-    position: initial !important;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-
-    > canvas {
-      top: 0;
-      left: 0;
-      width: 100% !important;
-      height: 100% !important;
-    }
-  }
 `;
 
 type FrameProps = {
@@ -49,137 +29,236 @@ type FrameProps = {
 };
 const Frame = React.forwardRef<Konva.Stage, FrameProps>(
   ({ name, image }, ref) => {
-    const [scale, setScale] = useState<number>(1);
+    const [isSelected, setSelected] = useState(false);
     const [frameUrl] = useImage(frame);
     const parentRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<Konva.Image>(null);
-    const isDragging = useRef<boolean>(false);
-    const initialPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+    const exportImageRef = useRef<Konva.Image>(null);
+    const trRef = useRef<Konva.Transformer>(null);
+    const size = useSize(parentRef);
+
+    const scaleRatio = useMemo(() => {
+      if (size) {
+        return size.width / IMAGE_WIDTH;
+      }
+      return 1;
+    }, [size]);
+
+    const imageRatio = useMemo(() => {
+      return IMAGE_WIDTH / IMAGE_HEIGHT;
+    }, []);
 
     useEffect(() => {
-      setScale(1);
-    }, [image]);
-
-    const ratio = useMemo(() => {
-      return parentRef.current
-        ? parentRef.current.clientWidth / IMAGE_WIDTH
-        : 1;
+      if (trRef.current && imageRef.current) {
+        if (image && isSelected) {
+          trRef.current.nodes([imageRef.current]);
+          trRef.current.getLayer()?.batchDraw();
+        } else {
+          trRef.current.detach();
+        }
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [parentRef.current]);
+    }, [imageRef.current, trRef.current, image, isSelected]);
 
-    useEffect(() => {
-      if (imageRef.current) {
+    const imageSize = useMemo(() => {
+      let width = 0,
+        height = 0;
+      if (image && size) {
+        width = image.width;
+        height = image.height;
+        const ratio = image.width / image.height;
+
+        if (ratio >= 1) {
+          if (image.width > size.width) {
+            width = size.width - 100;
+            const scaleRatio = width / image.width;
+            height = image.height * scaleRatio;
+          }
+        } else if (ratio < 1) {
+          if (image.height > size.height) {
+            height = size.height - 100;
+            const scaleRatio = height / image.height;
+            width = image.width * scaleRatio;
+          }
+        }
+      }
+      return { width, height };
+    }, [image, size]);
+
+    function onStageClick(e: KonvaEventObject<MouseEvent>) {
+      if (e.target.attrs.id === "frame") {
+        setSelected(false);
+      }
+      if (e.target.attrs.id === "photo") {
+        setSelected(true);
+      }
+    }
+
+    function copySize() {
+      if (imageRef.current && exportImageRef.current) {
         const img = imageRef.current;
-        const currentScale = img.scaleX();
-        const currentPosition = img.position();
+        const exImg = exportImageRef.current;
 
-        const center = {
-          x: IMAGE_WIDTH / 2,
-          y: 576,
-        };
+        const { width, height } = img.size();
+        const { x: sx, y: sy } = img.scale();
+        const { x: px, y: py } = img.position();
 
-        const relatedTo = {
-          x: (center.x - currentPosition.x) / currentScale,
-          y: (center.y - currentPosition.y) / currentScale,
-        };
+        exImg.size({
+          width: width / scaleRatio,
+          height: height / scaleRatio,
+        });
 
-        img.scale({ x: scale, y: scale });
-        img.position({
-          x: center.x - relatedTo.x * scale,
-          y: center.y - relatedTo.y * scale,
+        exImg.scale({
+          x: sx,
+          y: sy,
+        });
+
+        exImg.position({
+          x: px / scaleRatio,
+          y: py / scaleRatio,
         });
       }
-    }, [scale, ratio]);
-
-    function onMouseDown(e: KonvaEventObject<MouseEvent>) {
-      if (imageRef.current) {
-        initialPos.current = {
-          x: e.evt.x - imageRef.current.x() * ratio,
-          y: e.evt.y - imageRef.current.y() * ratio,
-        };
-        isDragging.current = true;
-        document.onmousemove = onMouseMove;
-        document.onmouseup = onMouseUp;
-      }
-    }
-
-    function onMouseMove(e: MouseEvent) {
-      if (imageRef.current && isDragging.current) {
-        const img = imageRef.current;
-        const dx = e.clientX - initialPos.current.x;
-        const dy = e.clientY - initialPos.current.y;
-
-        img.x((img.offsetX() + dx) / ratio);
-        img.y((img.offsetY() + dy) / ratio);
-      }
-    }
-
-    function onMouseUp(e: MouseEvent) {
-      initialPos.current = { x: e.clientX * ratio, y: e.clientY * ratio };
-      isDragging.current = false;
     }
 
     return (
       <div>
         <Wrapper ref={parentRef}>
-          <Stage ref={ref} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}>
-            <Layer>
-              <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
-            </Layer>
-            <Layer>
-              <KonvaImage
-                image={frameUrl}
-                onMouseDown={onMouseDown}
-                width={IMAGE_WIDTH}
-                height={IMAGE_HEIGHT}
-                x={0}
-                y={0}
-              />
-            </Layer>
+          {size && (
+            <Stage
+              width={size.width}
+              height={size.width / imageRatio}
+              onMouseDown={onStageClick}
+            >
+              <Layer>
+                <Rect
+                  width={size.width}
+                  height={size.width / imageRatio}
+                  fill="#ffffff"
+                />
+              </Layer>
+              <Layer>
+                <KonvaImage
+                  id="frame"
+                  image={frameUrl}
+                  width={size.width}
+                  height={size.width / imageRatio}
+                  x={0}
+                  y={0}
+                />
+              </Layer>
 
-            <Layer>
-              <Group
-                clipFunc={(ctx: any) => {
-                  ctx.arc(IMAGE_WIDTH / 2, 567, 247, 0, Math.PI * 2, false);
-                }}
-              >
-                {image && (
-                  <KonvaImage
-                    ref={imageRef}
-                    image={image}
-                    onMouseDown={onMouseDown}
-                  />
-                )}
-              </Group>
-            </Layer>
-            <Layer>
-              <Text
-                x={0}
-                width={946}
-                y={1000}
-                text={name}
-                fill="#FAEE65"
-                fontSize={72}
-                align="center"
-                fontFamily="VL Selphia"
-              />
-            </Layer>
-          </Stage>
+              <Layer>
+                <Group
+                  clipFunc={(ctx: any) => {
+                    ctx.arc(
+                      size.width / 2 - 1,
+                      (size.height * 567) / IMAGE_HEIGHT,
+                      (size.width * 247) / IMAGE_WIDTH,
+                      0,
+                      Math.PI * 2,
+                      false
+                    );
+                  }}
+                >
+                  {image && (
+                    <KonvaImage
+                      id="photo"
+                      ref={imageRef}
+                      image={image}
+                      draggable
+                      width={imageSize.width}
+                      height={imageSize.height}
+                      x={(size.width - imageSize.width) / 2}
+                      y={
+                        ((size.height - imageSize.height) * 576) / IMAGE_HEIGHT
+                      }
+                      onDragEnd={copySize}
+                      onTransformEnd={copySize}
+                    />
+                  )}
+                </Group>
+                <Transformer
+                  id="transformer"
+                  ref={trRef}
+                  centeredScaling={true}
+                  keepRatio={true}
+                  enabledAnchors={[
+                    "top-left",
+                    "top-right",
+                    "bottom-left",
+                    "bottom-right",
+                  ]}
+                />
+              </Layer>
+              <Layer>
+                <Text
+                  x={0}
+                  width={size.width}
+                  y={(size.height * 980) / IMAGE_HEIGHT}
+                  text={name}
+                  fill="#FAEE65"
+                  fontSize={(size.width * 72) / IMAGE_WIDTH}
+                  align="center"
+                  fontFamily="VL Selphia"
+                />
+              </Layer>
+            </Stage>
+          )}
         </Wrapper>
 
-        {image && (
-          <>
-            <p>Phóng to</p>
-            <Slider
-              defaultValue={1}
-              value={scale}
-              min={0.025}
-              max={2}
-              step={0.025}
-              onChange={(value) => setScale(value)}
+        <Stage
+          width={IMAGE_WIDTH}
+          height={IMAGE_HEIGHT}
+          ref={ref}
+          style={{ display: "none" }}
+        >
+          <Layer>
+            <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
+          </Layer>
+          <Layer>
+            <KonvaImage
+              image={frameUrl}
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT}
+              x={0}
+              y={0}
             />
-          </>
-        )}
+          </Layer>
+
+          <Layer>
+            <Group
+              clipFunc={(ctx: any) => {
+                ctx.arc(IMAGE_WIDTH / 2 - 1, 567, 247, 0, Math.PI * 2, false);
+              }}
+            >
+              {image && (
+                <KonvaImage
+                  ref={exportImageRef}
+                  image={image}
+                  width={imageSize.width / scaleRatio}
+                  height={imageSize.height / scaleRatio}
+                  x={(IMAGE_WIDTH - imageSize.width / scaleRatio) / 2}
+                  y={
+                    ((IMAGE_HEIGHT - imageSize.height / scaleRatio) * 576) /
+                    IMAGE_HEIGHT
+                  }
+                />
+              )}
+            </Group>
+          </Layer>
+          <Layer>
+            <Text
+              x={0}
+              width={IMAGE_WIDTH}
+              y={980}
+              text={name}
+              fill="#FAEE65"
+              fontSize={72}
+              align="center"
+              fontFamily="VL Selphia"
+            />
+          </Layer>
+        </Stage>
       </div>
     );
   }
