@@ -177,7 +177,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     />
                   )}
                 </Group>
-                {isSelected && (
+                {image && isSelected && (
                   <Transformer
                     id="transformer"
                     ref={trRef}
