@@ -200,6 +200,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   fontSize={(size.width * 72) / IMAGE_WIDTH}
                   align="center"
                   fontFamily="VL Selphia"
+                  preventDefault={false}
                 />
               </Layer>
             </Stage>
