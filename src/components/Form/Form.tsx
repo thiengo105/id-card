@@ -55,17 +55,23 @@ const InfoForm: React.FC<InfoFormProps> = ({
             type="info"
             message="Lưu ý"
             description={
-              <div>
-                Hãy chọn ảnh có mặt của mình nhé, vì không có ảnh của mình thì
-                thẻ này sẽ không được duyệt và in, nếu đi chương trình mà không
-                có thẻ tình nguyện viên thì sẽ buồn lắm đó{" "}
-                <span role="img">{String.fromCodePoint(0x1f641)}</span>
-              </div>
+              <ul>
+                <li>
+                  Hãy chọn ảnh có mặt của mình nhé, vì không có ảnh của mình
+                  thì thẻ này sẽ không được duyệt và in, nếu đi chương trình mà
+                  không có thẻ tình nguyện viên thì sẽ buồn lắm đó{" "}
+                  <span role="img">{String.fromCodePoint(0x1f641)}</span>
+                </li>
+                <li>
+                  Nếu bạn chưa có tên trong danh sách, hãy liên hệ <a href="https://www.facebook.com/nhub1911491">Huỳnh Như</a> để bổ sung nha <span>{String.fromCodePoint(0x1F601)}</span>
+                </li>
+              </ul>
             }
           />
         </Form.Item>
         <Form.Item label="Họ và tên">
           <Select
+            placeholder="Chọn tên"
             showSearch
             allowClear
             size="large"
