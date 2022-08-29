@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Frame from "components/Frame/Frame";
 import styled from "styled-components";
 import "antd/dist/antd.css";
@@ -8,6 +8,7 @@ import { uploadToCloudinary } from "services/upload";
 import { Alert, Divider, Modal } from "antd";
 import heic2any from "heic2any";
 import Footer from "components/Footer/Footer";
+import people from "data/db.json";
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,14 +41,22 @@ const ColRight = styled.div`
 `;
 
 function App() {
-  const [name, setName] = useState<string>("");
+  const [id, setId] = useState<number>(0);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const frameRef = useRef<Konva.Stage>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const name = useMemo(() => {
+    const person = people.find((person) => person.id === id);
+    if (person) {
+      return person.name;
+    }
+    return "";
+  }, [id]);
+
   function resetData() {
-    setName("");
+    setId(0);
     setImage(null);
   }
 
@@ -139,8 +148,8 @@ function App() {
             imageLoading={imageLoading}
             hasImage={!!image}
             onFileChange={onFileChange}
-            onNameChange={(name) => {
-              setName(name);
+            onIdChange={(id) => {
+              setId(id);
             }}
             onDoneClick={onDoneClick}
           />

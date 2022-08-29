@@ -1,6 +1,13 @@
-import { Alert, Button, Form, Input, Space, Upload, UploadFile } from "antd";
+import { Alert, Button, Form, Select, Space, Upload, UploadFile } from "antd";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import names from "data/db.json";
+import { normalizeVietnamese } from "utils/string";
+
+const options = names.map(({ id, name }) => ({
+  label: name,
+  value: id,
+}));
 
 const Wrapper = styled.div`
   .upload-wrapper {
@@ -18,7 +25,7 @@ type InfoFormProps = {
   imageLoading: boolean;
   hasImage: boolean;
   onFileChange(file: File): void;
-  onNameChange(name: string): void;
+  onIdChange(id: number): void;
   onDoneClick(): void;
 };
 
@@ -28,7 +35,7 @@ const InfoForm: React.FC<InfoFormProps> = ({
   imageLoading,
   hasImage,
   onFileChange,
-  onNameChange,
+  onIdChange,
   onDoneClick,
 }) => {
   const [fileList, setFileList] = useState<Array<UploadFile>>([]);
@@ -58,10 +65,17 @@ const InfoForm: React.FC<InfoFormProps> = ({
           />
         </Form.Item>
         <Form.Item label="Họ và tên">
-          <Input
+          <Select
+            showSearch
+            allowClear
             size="large"
-            value={name}
-            onChange={(e) => onNameChange(e.target.value)}
+            options={options}
+            onChange={(value) => onIdChange(value)}
+            filterOption={(input, option) => {
+              return normalizeVietnamese(option!.label).includes(
+                normalizeVietnamese(input)
+              );
+            }}
           />
         </Form.Item>
       </Form>
