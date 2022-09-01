@@ -63,7 +63,7 @@ const InfoForm: React.FC<InfoFormProps> = ({
                   <span role="img">{String.fromCodePoint(0x1f641)}</span>
                 </li>
                 <li>
-                  Nếu bạn chưa có tên trong danh sách, hãy liên hệ <a href="https://www.facebook.com/nhub1911491">Huỳnh Như</a> để bổ sung nha <span>{String.fromCodePoint(0x1F601)}</span>
+                  Nếu bạn chưa có tên trong danh sách hoặc sai tên, hãy liên hệ <a href="https://www.facebook.com/nhub1911491">Huỳnh Như</a> để cập nhật thông tin nha <span>{String.fromCodePoint(0x1F601)}</span>
                 </li>
               </ul>
             }

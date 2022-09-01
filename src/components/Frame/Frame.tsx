@@ -14,9 +14,14 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { useSize } from "ahooks";
+import { Box } from "konva/lib/shapes/Transformer";
 
 const IMAGE_WIDTH = 945;
 const IMAGE_HEIGHT = 1299;
+const AVATAR_Y = 567;
+const AVATAR_RADIUS = 247;
+const NAME_Y = 980;
+const FONT_SIZE = 72;
 
 const Wrapper = styled.div`
   position: relative;
@@ -57,6 +62,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
       }
     }, [image, isSelected]);
 
+    // Resize the image to fix the frame,
+    // otherwise the transformer will be out of frame
     const imageSize = useMemo(() => {
       let width = 0,
         height = 0;
@@ -120,6 +127,14 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
       }
     }
 
+    function getLimitTransformBox(oldBox: Box, newBox: Box): Box {
+      const avatarSize = AVATAR_RADIUS * scaleRatio * 2;
+      if (newBox.width < avatarSize || newBox.height < avatarSize) {
+        return oldBox;
+      }
+      return newBox;
+    }
+
     return (
       <div>
         <Wrapper ref={parentRef}>
@@ -149,8 +164,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   clipFunc={(ctx: any) => {
                     ctx.arc(
                       size.width / 2 - 1,
-                      (size.height * 567) / IMAGE_HEIGHT,
-                      (size.width * 247) / IMAGE_WIDTH,
+                      (size.height * AVATAR_Y) / IMAGE_HEIGHT,
+                      (size.width * AVATAR_RADIUS) / IMAGE_WIDTH,
                       0,
                       Math.PI * 2,
                       false
@@ -170,7 +185,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                       height={imageSize.height}
                       x={(size.width - imageSize.width) / 2}
                       y={
-                        ((size.height - imageSize.height) * 576) / IMAGE_HEIGHT
+                        ((size.height - imageSize.height) * AVATAR_Y) /
+                        IMAGE_HEIGHT
                       }
                       onDragEnd={copySize}
                       onTransformEnd={copySize}
@@ -183,6 +199,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     ref={trRef}
                     centeredScaling={true}
                     keepRatio={true}
+                    boundBoxFunc={getLimitTransformBox}
                     enabledAnchors={[
                       "top-left",
                       "top-right",
@@ -194,10 +211,10 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                 <Text
                   x={0}
                   width={size.width}
-                  y={(size.height * 980) / IMAGE_HEIGHT}
+                  y={(size.height * NAME_Y) / IMAGE_HEIGHT}
                   text={name}
                   fill="#FAEE65"
-                  fontSize={(size.width * 72) / IMAGE_WIDTH}
+                  fontSize={(size.width * FONT_SIZE) / IMAGE_WIDTH}
                   align="center"
                   fontFamily="VL Selphia"
                   preventDefault={false}
@@ -211,7 +228,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
           width={IMAGE_WIDTH}
           height={IMAGE_HEIGHT}
           ref={ref}
-          style={{ display: "none" }}
+          style={{ display: "block" }}
         >
           <Layer>
             <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
@@ -224,7 +241,14 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
             />
             <Group
               clipFunc={(ctx: any) => {
-                ctx.arc(IMAGE_WIDTH / 2 - 1, 567, 247, 0, Math.PI * 2, false);
+                ctx.arc(
+                  IMAGE_WIDTH / 2 - 1,
+                  AVATAR_Y,
+                  AVATAR_RADIUS,
+                  0,
+                  Math.PI * 2,
+                  false
+                );
               }}
             >
               {image && (
@@ -235,7 +259,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   height={imageSize.height / scaleRatio}
                   x={(IMAGE_WIDTH - imageSize.width / scaleRatio) / 2}
                   y={
-                    ((IMAGE_HEIGHT - imageSize.height / scaleRatio) * 576) /
+                    ((IMAGE_HEIGHT - imageSize.height / scaleRatio) *
+                      AVATAR_Y) /
                     IMAGE_HEIGHT
                   }
                 />
@@ -244,10 +269,10 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
             <Text
               x={0}
               width={IMAGE_WIDTH}
-              y={980}
+              y={NAME_Y}
               text={name}
               fill="#FAEE65"
-              fontSize={72}
+              fontSize={FONT_SIZE}
               align="center"
               fontFamily="VL Selphia"
             />
