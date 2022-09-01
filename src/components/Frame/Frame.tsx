@@ -231,7 +231,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
           width={IMAGE_WIDTH}
           height={IMAGE_HEIGHT}
           ref={ref}
-          style={{ display: "block" }}
+          style={{ display: "none" }}
         >
           <Layer>
             <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
