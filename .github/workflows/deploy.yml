@@ -3,16 +3,12 @@ on:
   push:
     branches: [ "master" ]
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    steps:
-        - uses: actions/checkout@v3
-        - name: Install dependencies
-          run: npm install
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
       - name: Deploy to gh-pages
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
