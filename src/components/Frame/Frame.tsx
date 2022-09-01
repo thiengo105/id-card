@@ -109,6 +109,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
         const { width, height } = img.size();
         const { x: sx, y: sy } = img.scale();
         const { x: px, y: py } = img.position();
+        const rotation = img.rotation();
 
         exImg.size({
           width: width / scaleRatio,
@@ -124,6 +125,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
           x: px / scaleRatio,
           y: py / scaleRatio,
         });
+
+        exImg.rotation(rotation);
       }
     }
 
@@ -228,7 +231,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
           width={IMAGE_WIDTH}
           height={IMAGE_HEIGHT}
           ref={ref}
-          style={{ display: "none" }}
+          style={{ display: "block" }}
         >
           <Layer>
             <Rect width={IMAGE_WIDTH} height={IMAGE_HEIGHT} fill="#ffffff" />
