@@ -196,6 +196,17 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     />
                   )}
                 </Group>
+                <Text
+                  x={0}
+                  width={size.width}
+                  y={(size.height * NAME_Y) / IMAGE_HEIGHT}
+                  text={name}
+                  fill="#FAEE65"
+                  fontSize={(size.width * FONT_SIZE) / IMAGE_WIDTH}
+                  align="center"
+                  fontFamily="VL Selphia"
+                  preventDefault={false}
+                />
                 {image && isSelected && (
                   <Transformer
                     id="transformer"
@@ -211,17 +222,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     ]}
                   />
                 )}
-                <Text
-                  x={0}
-                  width={size.width}
-                  y={(size.height * NAME_Y) / IMAGE_HEIGHT}
-                  text={name}
-                  fill="#FAEE65"
-                  fontSize={(size.width * FONT_SIZE) / IMAGE_WIDTH}
-                  align="center"
-                  fontFamily="VL Selphia"
-                  preventDefault={false}
-                />
               </Layer>
             </Stage>
           )}
