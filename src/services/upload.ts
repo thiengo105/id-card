@@ -11,6 +11,7 @@ export async function uploadToCloudinary(file: File) {
   const params = {
     folder: "THE_TNV",
     timestamp: timestamp,
+    unique_filename: false,
     use_filename: true
   }
   const paramsString = stringify(params);
@@ -22,6 +23,7 @@ export async function uploadToCloudinary(file: File) {
   formData.append("timestamp", timestamp + "");
   formData.append("api_key", apiKey);
   formData.append("signature", signature);
+  formData.append("unique_filename", "false");
   formData.append("use_filename", "true");
   formData.append("folder", "THE_TNV");
 
