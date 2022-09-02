@@ -4,8 +4,8 @@ import styled from "styled-components";
 import names from "data/db.json";
 import { normalizeVietnamese } from "utils/string";
 
-const options = names.map(({ id, name }) => ({
-  label: name,
+const options = names.map(({ id, name }, index) => ({
+  label: (index + 1) + ". " + name,
   value: id,
 }));
 
