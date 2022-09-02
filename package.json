@@ -15,6 +15,7 @@
     "ahooks": "^3.7.0",
     "antd": "^4.22.7",
     "axios": "^0.27.2",
+    "canvas-confetti": "^1.5.1",
     "crypto-js": "^4.1.1",
     "heic2any": "^0.0.3",
     "konva": "^8.3.11",
@@ -55,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.4.3",
     "@types/crypto-js": "^4.1.1",
     "gh-pages": "^4.0.0"
   }

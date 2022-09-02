@@ -9,6 +9,7 @@ import { Alert, Divider, Modal } from "antd";
 import heic2any from "heic2any";
 import Footer from "components/Footer/Footer";
 import people from "data/db.json";
+import confetti from "canvas-confetti";
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,11 +56,6 @@ function App() {
     return "";
   }, [id]);
 
-  function resetData() {
-    setId(0);
-    setImage(null);
-  }
-
   async function onDoneClick() {
     if (frameRef.current) {
       setLoading(true);
@@ -72,6 +68,11 @@ function App() {
             const file = new File([blob], fileName);
             await uploadToCloudinary(file);
             setLoading(false);
+            confetti({
+              particleCount: 120,
+              spread: 120,
+              zIndex: 2000,
+            });
             Modal.confirm({
               icon: null,
               title: "Đã tải lên ảnh thẻ tình nguyện viên",
@@ -83,9 +84,6 @@ function App() {
                 a.href = url;
                 a.download = fileName;
                 a.click();
-              },
-              afterClose: () => {
-                resetData();
               },
             });
           } catch (error: any) {
