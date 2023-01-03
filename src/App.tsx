@@ -51,7 +51,7 @@ function App() {
   const name = useMemo(() => {
     const person = people.find((person) => person.id === id);
     if (person) {
-      return person.name;
+      return id + ". " + person.name;
     }
     return "";
   }, [id]);
