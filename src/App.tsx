@@ -51,7 +51,7 @@ function App() {
   const name = useMemo(() => {
     const person = people.find((person) => person.id === id);
     if (person) {
-      return id + ". " + person.name;
+      return person.name;
     }
     return "";
   }, [id]);
@@ -59,7 +59,7 @@ function App() {
   async function onDoneClick() {
     if (frameRef.current) {
       setLoading(true);
-      const fileName = `${name}.png`;
+      const fileName = `${id}_${name}.png`;
       const url = frameRef.current.toDataURL();
 
       frameRef.current.toBlob({
