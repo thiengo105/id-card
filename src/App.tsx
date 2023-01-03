@@ -114,6 +114,7 @@ function App() {
     setImageLoading(true);
     let fileToConvert = file;
 
+    // Convert HEIC format on iPhone to JPG
     if (file.type.includes("image/heic")) {
       const convertedBlob = (await heic2any({
         blob: file,

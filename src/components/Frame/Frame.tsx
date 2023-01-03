@@ -7,7 +7,7 @@ import {
   Rect,
   Transformer,
 } from "react-konva";
-import frame from "assets/images/id-card.svg";
+import frame from "assets/images/frame.png";
 import useImage from "use-image";
 import styled from "styled-components";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -18,10 +18,10 @@ import { Box } from "konva/lib/shapes/Transformer";
 
 const IMAGE_WIDTH = 945;
 const IMAGE_HEIGHT = 1299;
-const AVATAR_Y = 567;
-const AVATAR_RADIUS = 247;
-const NAME_Y = 980;
-const FONT_SIZE = 72;
+const AVATAR_Y = 535;
+const AVATAR_RADIUS = 558 / 2;
+const NAME_Y = 1086;
+const FONT_SIZE = 80;
 const GUIDELINE_OFFSET = 5;
 
 const Wrapper = styled.div`
@@ -188,8 +188,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
     function getLineGuideStops(): GuideStops {
       return {
         vertical: [
-          avatarNode.x - 1,
-          avatarNode.x + avatarNode.width - 1,
+          avatarNode.x + 1,
+          avatarNode.x + avatarNode.width + 2,
         ],
         horizontal: [
           avatarNode.y,
@@ -429,11 +429,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                 onDragMove={onLayerDragMove}
                 onDragEnd={onLayerDragEnd}
               >
-                <Rect
-                  width={size.width}
-                  height={size.width / imageRatio}
-                  fill="#ffffff"
-                />
+
                 <KonvaImage
                   id="frame"
                   image={frameUrl}
@@ -443,10 +439,11 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   y={0}
                   preventDefault={false}
                 />
+
                 <Group
                   clipFunc={(ctx: any) => {
                     ctx.arc(
-                      size.width / 2 - 1,
+                      size.width / 2 + 3,
                       (size.height * AVATAR_Y) / IMAGE_HEIGHT,
                       (size.width * AVATAR_RADIUS) / IMAGE_WIDTH,
                       0,
@@ -481,10 +478,10 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   width={size.width}
                   y={(size.height * NAME_Y) / IMAGE_HEIGHT}
                   text={name}
-                  fill="#FAEE65"
+                  fill="#C82B27"
                   fontSize={(size.width * FONT_SIZE) / IMAGE_WIDTH}
                   align="center"
-                  fontFamily="VL Selphia"
+                  fontFamily="VL Brannboll Ny"
                   preventDefault={false}
                 />
                 {/* <Line
@@ -591,7 +588,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
             <Group
               clipFunc={(ctx: any) => {
                 ctx.arc(
-                  IMAGE_WIDTH / 2 - 1,
+                  IMAGE_WIDTH / 2 + 7,
                   AVATAR_Y,
                   AVATAR_RADIUS,
                   0,
@@ -620,10 +617,10 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               width={IMAGE_WIDTH}
               y={NAME_Y}
               text={name}
-              fill="#FAEE65"
+              fill="#C82B27"
               fontSize={FONT_SIZE}
               align="center"
-              fontFamily="VL Selphia"
+              fontFamily="VL Brannboll Ny"
             />
           </Layer>
         </Stage>
