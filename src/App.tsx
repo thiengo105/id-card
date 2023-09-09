@@ -76,9 +76,9 @@ function App() {
             Modal.confirm({
               icon: null,
               title: "Đã tải lên ảnh thẻ tình nguyện viên",
-              content: `Cảm ơn ${name} nha! Bạn có muốn tải luôn cái ảnh về không?`,
+              content: `Cảm ơn ${name} nha! Bạn có muốn tải ảnh về không?`,
               okText: "OK tải đi",
-              cancelText: "Thôi khỏi",
+              cancelText: "Khỏi, cảm ơn",
               onOk: () => {
                 const a = document.createElement("a");
                 a.href = url;
