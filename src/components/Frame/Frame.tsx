@@ -16,12 +16,12 @@ import { KonvaEventObject } from "konva/lib/Node";
 import { useSize } from "ahooks";
 import { Box } from "konva/lib/shapes/Transformer";
 
-const IMAGE_WIDTH = 945;
-const IMAGE_HEIGHT = 1299;
-const AVATAR_Y = 535;
-const AVATAR_RADIUS = 558 / 2;
-const NAME_Y = 1086;
-const FONT_SIZE = 80;
+const IMAGE_WIDTH = 946;
+const IMAGE_HEIGHT = 1300;
+const AVATAR_Y = 585;
+const AVATAR_RADIUS = 630 / 2;
+const NAME_Y = 980;
+const FONT_SIZE = 65;
 const GUIDELINE_OFFSET = 5;
 
 const Wrapper = styled.div`
@@ -187,14 +187,8 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
 
     function getLineGuideStops(): GuideStops {
       return {
-        vertical: [
-          avatarNode.x + 1,
-          avatarNode.x + avatarNode.width + 2,
-        ],
-        horizontal: [
-          avatarNode.y,
-          avatarNode.y + avatarNode.height,
-        ],
+        vertical: [avatarNode.x + 1, avatarNode.x + avatarNode.width + 2],
+        horizontal: [avatarNode.y, avatarNode.y + avatarNode.height],
       };
     }
 
@@ -429,7 +423,6 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                 onDragMove={onLayerDragMove}
                 onDragEnd={onLayerDragEnd}
               >
-
                 <KonvaImage
                   id="frame"
                   image={frameUrl}
@@ -478,10 +471,10 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   width={size.width}
                   y={(size.height * NAME_Y) / IMAGE_HEIGHT}
                   text={name}
-                  fill="#C82B27"
+                  fill="#fff"
                   fontSize={(size.width * FONT_SIZE) / IMAGE_WIDTH}
                   align="center"
-                  fontFamily="VL Brannboll Ny"
+                  fontFamily="UTM Avo"
                   preventDefault={false}
                 />
                 {/* <Line
