@@ -17,7 +17,7 @@ import { useSize } from "ahooks";
 import { Box } from "konva/lib/shapes/Transformer";
 
 const IMAGE_WIDTH = 946;
-const IMAGE_HEIGHT = 1300;
+const IMAGE_HEIGHT = 1299;
 const AVATAR_Y = 585;
 const AVATAR_RADIUS = 630 / 2;
 const NAME_Y = 980;
