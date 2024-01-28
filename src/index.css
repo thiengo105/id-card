@@ -1,7 +1,19 @@
 @font-face {
-  font-family: "VL Brannboll Ny";
-  src: url("assets/fonts/VLBRANNBOLLNY.OTF");
+  font-family: "UTM Avo";
+  src: url("assets/fonts/UTMAvo.ttf");
 }
+
+@font-face {
+  font-family: "UTM Avo";
+  src: url("assets/fonts/UTMAvoBold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "VL Andalusia";
+  src: url("assets/fonts/VLANDALUSIA.OTF");
+}
+
 
 ul {
   list-style-type: "- ";

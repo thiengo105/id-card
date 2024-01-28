@@ -15,6 +15,7 @@ import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { useSize } from "ahooks";
 import { Box } from "konva/lib/shapes/Transformer";
+import { Vector2d } from "konva/lib/types";
 
 const IMAGE_WIDTH = 946;
 const IMAGE_HEIGHT = 1299;
@@ -23,6 +24,9 @@ const AVATAR_RADIUS = 630 / 2;
 const NAME_Y = 980;
 const FONT_SIZE = 65;
 const GUIDELINE_OFFSET = 5;
+
+const FONT_COLOR = "#fff";
+const FONT_FAMILY = "UTM Avo";
 
 const Wrapper = styled.div`
   position: relative;
@@ -152,7 +156,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
         const exImg = exportImageRef.current;
 
         const { width, height } = img.size();
-        const { x: sx, y: sy } = img.scale();
+        const { x: sx, y: sy } = img.scale() as Vector2d;
         const { x: px, y: py } = img.position();
         const rotation = img.rotation();
 
@@ -436,7 +440,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                 <Group
                   clipFunc={(ctx: any) => {
                     ctx.arc(
-                      size.width / 2 + 3,
+                      size.width / 2,
                       (size.height * AVATAR_Y) / IMAGE_HEIGHT,
                       (size.width * AVATAR_RADIUS) / IMAGE_WIDTH,
                       0,
@@ -471,78 +475,14 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   width={size.width}
                   y={(size.height * NAME_Y) / IMAGE_HEIGHT}
                   text={name}
-                  fill="#fff"
+                  fill={FONT_COLOR}
                   fontSize={(size.width * FONT_SIZE) / IMAGE_WIDTH}
                   align="center"
-                  fontFamily="UTM Avo"
+                  fontFamily={FONT_FAMILY}
                   preventDefault={false}
+                  shadowColor="#F6F2A1"
+                  shadowBlur={10}
                 />
-                {/* <Line
-                  points={[
-                    avatarNode.x - 1,
-                    0,
-                    avatarNode.x - 1,
-                    IMAGE_HEIGHT * scaleRatio,
-                  ]}
-                  stroke="rgb(0, 161, 255)"
-                  strokeWidth={1}
-                  dash={[4, 6]}
-                />
-                <Line
-                  points={[
-                    (IMAGE_WIDTH / 2) * scaleRatio,
-                    0,
-                    (IMAGE_WIDTH / 2) * scaleRatio,
-                    IMAGE_HEIGHT * scaleRatio,
-                  ]}
-                  stroke="rgb(0, 161, 255)"
-                  strokeWidth={1}
-                  dash={[4, 6]}
-                />
-                <Line
-                  points={[
-                    avatarNode.x + avatarNode.width - 1,
-                    0,
-                    avatarNode.x + avatarNode.width - 1,
-                    IMAGE_HEIGHT * scaleRatio,
-                  ]}
-                  stroke="rgb(0, 161, 255)"
-                  strokeWidth={1}
-                  dash={[4, 6]}
-                />
-                <Line
-                  points={[
-                    0,
-                    avatarNode.y,
-                    IMAGE_WIDTH * scaleRatio,
-                    avatarNode.y,
-                  ]}
-                  stroke="rgb(0, 161, 255)"
-                  strokeWidth={1}
-                  dash={[4, 6]}
-                />
-                <Line
-                  points={[
-                    0,
-                    AVATAR_Y * scaleRatio,
-                    IMAGE_WIDTH * scaleRatio,
-                    AVATAR_Y * scaleRatio,
-                  ]}
-                  stroke="rgb(0, 161, 255)"
-                  strokeWidth={1}
-                  dash={[4, 6]}
-                />
-                <Line
-                  points={[
-                    0,
-                    avatarNode.y + avatarNode.height,
-                    IMAGE_WIDTH * scaleRatio,
-                    avatarNode.y + avatarNode.height,
-                  ]}
-                  stroke="rgb(0, 161, 255)"
-                  strokeWidth={1}
-                  dash={[4, 6]}
-                /> */}
                 {image && isSelected && (
                   <Transformer
                     id="transformer"
@@ -581,7 +521,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
             <Group
               clipFunc={(ctx: any) => {
                 ctx.arc(
-                  IMAGE_WIDTH / 2 + 7,
+                  IMAGE_WIDTH / 2,
                   AVATAR_Y,
                   AVATAR_RADIUS,
                   0,
@@ -610,10 +550,12 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               width={IMAGE_WIDTH}
               y={NAME_Y}
               text={name}
-              fill="#fff"
+              fill={FONT_COLOR}
               fontSize={FONT_SIZE}
               align="center"
-              fontFamily="UTM Avo"
+              fontFamily={FONT_FAMILY}
+              shadowColor="#F6F2A1"
+              shadowBlur={10}
             />
           </Layer>
         </Stage>
