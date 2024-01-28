@@ -610,10 +610,10 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               width={IMAGE_WIDTH}
               y={NAME_Y}
               text={name}
-              fill="#C82B27"
+              fill="#fff"
               fontSize={FONT_SIZE}
               align="center"
-              fontFamily="VL Brannboll Ny"
+              fontFamily="UTM Avo"
             />
           </Layer>
         </Stage>
