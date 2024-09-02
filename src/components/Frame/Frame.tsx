@@ -8,6 +8,7 @@ import {
   Transformer,
 } from "react-konva";
 import frame from "assets/images/frame.png";
+import element from "assets/images/element.png";
 import useImage from "use-image";
 import styled from "styled-components";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -21,12 +22,11 @@ const IMAGE_WIDTH = 946;
 const IMAGE_HEIGHT = 1299;
 const AVATAR_Y = 585;
 const AVATAR_RADIUS = 630 / 2;
-const NAME_Y = 980;
-const FONT_SIZE = 65;
+const NAME_Y = 1060;
+const FONT_SIZE = 80;
 const GUIDELINE_OFFSET = 5;
-
-const FONT_COLOR = "#fff";
-const FONT_FAMILY = "UTM Avo";
+const FONT_COLOR = "#f9ea66";
+const FONT_FAMILY = "VL Andalusia";
 
 const Wrapper = styled.div`
   position: relative;
@@ -73,6 +73,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
   ({ name, image }, ref) => {
     const [isSelected, setSelected] = useState(true);
     const [frameUrl] = useImage(frame);
+    const [elementUrl] = useImage(element);
     const parentRef = useRef<HTMLDivElement>(null);
     const stageRef = useRef<Konva.Stage>(null);
     const layerRef = useRef<Konva.Layer>(null);
@@ -480,7 +481,7 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                   align="center"
                   fontFamily={FONT_FAMILY}
                   preventDefault={false}
-                  shadowColor="#F6F2A1"
+                  shadowColor="#fefbbf"
                   shadowBlur={10}
                 />
                 {image && isSelected && (
@@ -498,6 +499,17 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
                     ]}
                   />
                 )}
+                <KonvaImage
+                  id="element"
+                  image={elementUrl}
+                  width={size.width}
+                  height={size.height}
+                  x={0}
+                  y={0}
+                  preventDefault={false}
+                  zIndex={100}
+                  listening={false}
+                />
               </Layer>
             </Stage>
           )}
@@ -517,6 +529,16 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               height={IMAGE_HEIGHT}
               x={0}
               y={0}
+            />
+            <KonvaImage
+              id="element"
+              image={elementUrl}
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT}
+              x={0}
+              y={0}
+              preventDefault={false}
+              zIndex={100}
             />
             <Group
               clipFunc={(ctx: any) => {
@@ -556,6 +578,17 @@ const Frame = React.forwardRef<Konva.Stage, FrameProps>(
               fontFamily={FONT_FAMILY}
               shadowColor="#F6F2A1"
               shadowBlur={10}
+            />
+            <KonvaImage
+              id="element"
+              image={elementUrl}
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT}
+              x={0}
+              y={0}
+              preventDefault={false}
+              zIndex={100}
+              listening={false}
             />
           </Layer>
         </Stage>
